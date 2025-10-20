@@ -1,0 +1,75 @@
+const carritoLista = document.getElementById("carrito-lista");
+const totalElemento = document.getElementById("carrito-total");
+
+// Lista de productos con precios
+const productos = {
+  "Multímetro Digital": 35.00,
+  "Sensor PIR":25.00 ,
+  "Kit Solar": 35.00,
+  "Altavoz Bluetooth": 15.00
+};
+
+// Agregar producto al carrito
+function agregarAlCarrito(nombreProducto) {
+  const precio = productos[nombreProducto] || 0;
+
+  const item = document.createElement("li");
+  item.classList.add("item-carrito");
+
+  const texto = document.createElement("span");
+  texto.textContent = `${nombreProducto} - $${precio.toFixed(2)}`;
+
+  const botonEliminar = document.createElement("button");
+  botonEliminar.textContent = "Eliminar";
+  botonEliminar.classList.add("btn-eliminar");
+
+  botonEliminar.addEventListener("click", () => {
+    carritoLista.removeChild(item);
+    actualizarTotal();
+  });
+
+  item.appendChild(texto);
+  item.appendChild(botonEliminar);
+  carritoLista.appendChild(item);
+
+  actualizarTotal();
+}
+
+function verDetallesGenerales() {
+  const texto = `
+    En Electrosorios ofrecemos soluciones tecnológicas accesibles y funcionales para educación, seguridad y entretenimiento. 
+    Nuestros productos destacados incluyen kits solares, sensores PIR, altavoces Bluetooth y herramientas electrónicas como multímetros y escáneres. 
+    Cada artículo está diseñado para apoyar el aprendizaje práctico y el emprendimiento juvenil.
+  `;
+  document.getElementById("detalle-global-texto").textContent = texto;
+  document.getElementById("detalle-global").style.display = "block";
+}
+
+const detalles = {
+  "Kit de Energía Solar": "Incluye panel solar de 10W, batería recargable, controlador de carga y bombilla LED. Ideal para lugares sin acceso a la red eléctrica.",
+  "Sensor de Movimiento PIR": "Sensor infrarrojo pasivo que detecta movimiento humano con alta precisión. Perfecto para sistemas de seguridad y automatización.",
+  "Mini Altavoz Bluetooth": "Altavoz portátil con sonido potente y conexión estable. Compatible con teléfonos, tablets y computadoras vía Bluetooth.",
+  "Multímetro Digital": "Herramienta esencial para mediciones eléctricas precisas. Pantalla LCD, múltiples rangos de voltaje y resistencia.",
+  "Escaner para PC": "Escanea documentos y fotos con alta resolución. Conexión USB, compatible con Windows y Mac."
+};
+
+function verDetalles(nombreProducto) {
+  const texto = detalles[nombreProducto];
+  document.getElementById("detalle-texto").textContent = texto;
+  document.getElementById("detalle-producto").style.display = "block";
+}
+
+// Calcular total
+function actualizarTotal() {
+  let total = 0;
+  const items = carritoLista.querySelectorAll("li");
+
+  items.forEach(item => {
+    const texto = item.querySelector("span").textContent;
+    const precioTexto = texto.split(" - $")[1];
+    const precio = parseFloat(precioTexto);
+    total += precio;
+  });
+
+  totalElemento.textContent = `Total: $${total.toFixed(2)}`;
+}
